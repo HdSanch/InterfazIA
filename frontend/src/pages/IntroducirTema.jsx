@@ -66,12 +66,14 @@ export default function IntroducirTema() {
     setIsUploading(true);
 
     try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
       const formData = new FormData();
       formData.append("file", file);
 
-      const res = await fetch("http://127.0.0.1:8000/documents/upload", {
+      const res = await fetch(`${apiBaseUrl}/documents/upload`, {
         method: "POST",
         body: formData,
+        credentials: "include",
       });
 
       const data = await res.json();

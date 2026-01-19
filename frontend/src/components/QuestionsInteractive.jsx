@@ -14,6 +14,8 @@ export default function QuestionsInteractive({ questions, docId }) {
     setIsGrading(true);
     
     try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      
       // El backend espera query parameters, no JSON body
       const params = new URLSearchParams({
         question_id: question.id,
@@ -22,9 +24,9 @@ export default function QuestionsInteractive({ questions, docId }) {
       });
 
       console.log("Calificando pregunta:", question.id);
-      console.log("URL:", `http://127.0.0.1:8000/documents/${docId}/practice/grade?${params}`);
+      console.log("URL:", `${apiBaseUrl}/documents/${docId}/practice/grade?${params}`);
 
-      const res = await fetch(`http://127.0.0.1:8000/documents/${docId}/practice/grade?${params}`, {
+      const res = await fetch(`${apiBaseUrl}/documents/${docId}/practice/grade?${params}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" }
       });

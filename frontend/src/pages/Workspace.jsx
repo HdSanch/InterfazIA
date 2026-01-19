@@ -12,6 +12,7 @@ export default function Workspace() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeAction, setActiveAction] = useState(null);
   const [notification, setNotification] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   // Función para mostrar notificaciones
@@ -108,8 +109,9 @@ export default function Workspace() {
     setContent('');
     
     try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
       const data = await safeFetch(
-        `http://127.0.0.1:8000/documents/${docId}/summary`
+        `${apiBaseUrl}/documents/${docId}/summary`
       );
       
       console.log("Respuesta resumen:", data);
@@ -134,8 +136,9 @@ export default function Workspace() {
     setContent('');
     
     try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
       const data = await safeFetch(
-        `http://127.0.0.1:8000/documents/${docId}/practice/generate?n=8`
+        `${apiBaseUrl}/documents/${docId}/practice/generate?n=8`
       );
       
       console.log("Respuesta preguntas:", data);
@@ -161,8 +164,9 @@ export default function Workspace() {
     setContent('');
     
     try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
       const data = await safeFetch(
-        `http://127.0.0.1:8000/documents/${docId}/study-plan`
+        `${apiBaseUrl}/documents/${docId}/study-plan`
       );
       
       console.log("Respuesta plan:", data);
@@ -259,7 +263,72 @@ export default function Workspace() {
           {/* MAIN CONTENT */}
           <main className="workspace-main">
             <div className="workspace-header">
+              <button 
+                className="sidebar-toggle"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              >
+                ☰
+              </button>
               <h2>Espacio de Trabajo</h2>
+            </div>
+
+            {/* MOBILE MENU OVERLAY */}
+            <div 
+              className={`sidebar-mobile-overlay ${isMobileMenuOpen ? 'active' : ''}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+
+            {/* MOBILE MENU */}
+            <div className={`sidebar-mobile-menu ${isMobileMenuOpen ? 'active' : ''}`}>
+              <div style={{ paddingBottom: '16px', borderBottom: '1px solid #e0e0e0' }}>
+                <div style={{ fontSize: '12px', fontWeight: '700', color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>
+                  Documento Actual
+                </div>
+                <div style={{ background: '#f8f9fa', padding: '12px', borderRadius: '6px', borderLeft: '3px solid #243b6b' }}>
+                  <div style={{ fontSize: '11px', color: '#6c757d', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>
+                    Archivo
+                  </div>
+                  <div style={{ fontSize: '14px', color: '#1f2a44', fontWeight: '600', wordBreak: 'break-word', lineHeight: '1.4' }}>
+                    {fileName}
+                  </div>
+                </div>
+              </div>
+
+              <button 
+                className={`sidebar-action-btn ${activeAction === 'resumen' ? 'active' : ''}`}
+                onClick={() => {
+                  generarResumen();
+                  setIsMobileMenuOpen(false);
+                }}
+                disabled={isLoading}
+              >
+                <span className="action-icon">📝</span>
+                Generar Resumen
+              </button>
+
+              <button 
+                className={`sidebar-action-btn ${activeAction === 'preguntas' ? 'active' : ''}`}
+                onClick={() => {
+                  generarPreguntas();
+                  setIsMobileMenuOpen(false);
+                }}
+                disabled={isLoading}
+              >
+                <span className="action-icon">❓</span>
+                Generar Preguntas
+              </button>
+
+              <button 
+                className={`sidebar-action-btn ${activeAction === 'plan' ? 'active' : ''}`}
+                onClick={() => {
+                  generarPlan();
+                  setIsMobileMenuOpen(false);
+                }}
+                disabled={isLoading}
+              >
+                <span className="action-icon">📊</span>
+                Plan de Estudio
+              </button>
             </div>
 
             <div className="workspace-content-area">

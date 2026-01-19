@@ -3,15 +3,44 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
   font-family: "Segoe UI", Arial, sans-serif;
   background-color: #f7f3ef;
   color: #1f2a44;
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 #root {
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
+}
+
+/* SCROLLBAR GLOBAL - Estilo personalizado */
+html::-webkit-scrollbar {
+  width: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background: #f7f3ef;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: #d49a29;
+  border-radius: 5px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: #b88420;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d49a29 #f7f3ef;
 }
 
 /* NAVBAR */
@@ -111,7 +140,7 @@ html, body {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 1002;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -568,7 +597,8 @@ html, body {
 .upload-wrapper {
   max-width: 800px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 .upload-header {
@@ -599,9 +629,10 @@ html, body {
 .upload-card {
   background: #ffffff;
   border-radius: 8px;
-  padding: 48px 56px;
+  padding: 40px 40px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   border: 1px solid #e0e0e0;
+  box-sizing: border-box;
 }
 
 /* FILE INPUT ZONE */
@@ -614,11 +645,17 @@ html, body {
   position: relative;
   border: 2px dashed #c4c4c4;
   border-radius: 4px;
-  padding: 56px 32px;
+  padding: 40px 24px;
   text-align: center;
   background: #fafbfc;
   transition: all 0.25s ease;
   cursor: pointer;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .file-drop-zone:hover {
@@ -731,7 +768,8 @@ html, body {
   font-weight: 600;
   color: #1f2a44;
   margin-bottom: 4px;
-  word-break: break-all;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .file-size {
@@ -765,8 +803,8 @@ html, body {
   width: 100%;
   background: linear-gradient(135deg, #243b6b 0%, #1a2d4f 100%);
   border: none;
-  padding: 16px 32px;
-  font-size: 16px;
+  padding: 14px 28px;
+  font-size: 15px;
   font-weight: 600;
   color: white;
   border-radius: 4px;
@@ -775,6 +813,7 @@ html, body {
   transition: all 0.25s ease;
   letter-spacing: 0.3px;
   text-transform: uppercase;
+  box-sizing: border-box;
 }
 
 .upload-button:hover:not(:disabled) {
@@ -1219,20 +1258,19 @@ html, body {
 
 /* WORKSPACE */
 .workspace-container {
-    min-height: 100vh;
+  min-height: 100vh;
   padding-top: 90px;
   background: #f8f9fa;
-  overflow: hidden;
-  height: 100vh;
+  overflow: auto;
 }
 
 .workspace-layout {
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 0;
-  height: calc(100vh - 90px);
+  min-height: calc(100vh - 90px);
   max-width: 100vw;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* SIDEBAR */
@@ -1243,6 +1281,66 @@ html, body {
   flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+/* HAMBURGER MENU - Solo en móviles */
+.sidebar-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #d49a29;
+  cursor: pointer;
+  padding: 8px 12px;
+  z-index: 1001;
+  transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+  color: #f2b705;
+  transform: scale(1.1);
+}
+
+.sidebar-mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.sidebar-mobile-overlay.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+.sidebar-mobile-menu {
+  display: none;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 100%;
+  background: white;
+  flex-direction: column;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sidebar-mobile-menu.active {
+  display: flex;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .sidebar-header {
@@ -1330,9 +1428,9 @@ html, body {
 .workspace-main {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
   background: #f8f9fa;
-  height: 100%;
+  min-height: auto;
 }
 
 .workspace-header {
@@ -1340,6 +1438,9 @@ html, body {
   border-bottom: 1px solid #e0e0e0;
   padding: 20px 32px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .workspace-header h2 {
@@ -1347,16 +1448,17 @@ html, body {
   font-weight: 700;
   color: #1f2a44;
   margin: 0;
+  flex: 1;
 }
 
 .workspace-content-area {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: auto;
   padding: 24px 32px;
   display: flex;
   flex-direction: column;
   gap: 24px;
+  min-height: auto;
 }
 
 /* CONTENT DISPLAY - SIN SCROLL PROPIO */
@@ -1595,18 +1697,49 @@ html, body {
 @media (max-width: 768px) {
   .workspace-container {
     padding-top: 80px;
+    overflow: auto;
   }
 
   .workspace-layout {
-    height: auto;
+    grid-template-columns: 1fr;
+    gap: 0;
+    min-height: auto;
+    overflow: visible;
+  }
+
+  .workspace-sidebar {
+    display: none;
+  }
+
+  .sidebar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-mobile-overlay {
+    display: none;
+  }
+
+  .sidebar-mobile-menu {
+    width: 100%;
+    max-height: calc(100vh - 90px);
+    overflow-y: auto;
+    padding: 16px;
+    gap: 12px;
   }
 
   .workspace-content-area {
     padding: 16px;
+    overflow: visible;
+    min-height: auto;
+    flex: none;
   }
 
   .content-display-body {
     padding: 20px;
+    overflow: auto;
+    max-height: none;
   }
 
   .workspace-header {
@@ -1615,6 +1748,17 @@ html, body {
 
   .workspace-header h2 {
     font-size: 20px;
+  }
+  
+  .content-display-card {
+    max-height: none;
+    flex-shrink: 1;
+  }
+  
+  .workspace-chat-section {
+    height: auto;
+    min-height: 400px;
+    flex-shrink: 1;
   }
 }
 
@@ -1817,11 +1961,12 @@ html, body {
   border-radius: 8px;
   font-size: 14px;
   line-height: 1.6;
-  max-width: 85%;
+  max-width: 80%;
   position: relative;
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-word;
+  box-sizing: border-box;
 }
 
 .chat-message.user .message-bubble {
@@ -1880,21 +2025,27 @@ html, body {
 
 /* INPUT AREA */
 .chat-input-area {
-  padding: 20px 24px;
+  padding: 16px 20px;
   background: white;
   border-top: 1px solid #e0e0e0;
   flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .chat-input-form {
   display: flex;
   gap: 12px;
   align-items: flex-end;
+  padding: 0;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .chat-input-wrapper {
   flex: 1;
   position: relative;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .chat-input {
@@ -2382,6 +2533,7 @@ html, body {
 /* QUESTIONS INTERACTIVE */
 .questions-container {
   padding: 16px;
+  box-sizing: border-box;
 }
 
 .question-card {
@@ -2390,6 +2542,7 @@ html, body {
   border-radius: 8px;
   padding: 24px;
   margin-bottom: 24px;
+  box-sizing: border-box;
 }
 
 .question-header {
@@ -2412,6 +2565,7 @@ html, body {
   padding: 4px 12px;
   border-radius: 12px;
   font-weight: 600;
+  box-sizing: border-box;
 }
 
 .question-type.mcq {
@@ -2437,6 +2591,7 @@ html, body {
   flex-direction: column;
   gap: 12px;
   margin-bottom: 20px;
+  box-sizing: border-box;
 }
 
 .option-label {
@@ -2448,6 +2603,7 @@ html, body {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .option-label:hover {
@@ -2468,6 +2624,7 @@ html, body {
   font-family: inherit;
   resize: vertical;
   margin-bottom: 16px;
+  box-sizing: border-box;
 }
 
 .question-input:focus {
@@ -2485,6 +2642,7 @@ html, body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .grade-btn:hover:not(:disabled) {
@@ -2610,4 +2768,214 @@ html, body {
   content: "";
   display: block;
   margin: 4px 0;
+}
+
+/* EXTRA SMALL DEVICES (320px - 480px) */
+@media (max-width: 480px) {
+  html, body {
+    font-size: 14px;
+  }
+
+  .navbar {
+    padding: 8px 16px;
+  }
+
+  .navbar-left {
+    gap: 8px;
+  }
+
+  .logo {
+    height: 36px;
+  }
+
+  .brand {
+    font-size: 12px;
+  }
+
+  .navbar-right {
+    gap: 12px;
+  }
+
+  .nav-link {
+    font-size: 12px;
+    padding: 6px 2px;
+  }
+
+  .sidebar-toggle {
+    padding: 6px 8px;
+    font-size: 20px;
+  }
+
+  .home-container {
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+
+  .home-title {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+
+  .home-subtitle {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .home-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    max-width: none;
+    padding: 12px 20px;
+    font-size: 14px;
+  }
+
+  .upload-container {
+    padding-top: 80px;
+    padding-bottom: 40px;
+  }
+
+  .upload-wrapper {
+    padding: 0 12px;
+  }
+
+  .upload-title {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+
+  .upload-card {
+    padding: 20px 16px;
+    border-radius: 6px;
+  }
+
+  .file-drop-zone {
+    padding: 24px 12px;
+    min-height: 120px;
+  }
+
+  .upload-icon-wrapper {
+    width: 48px;
+    height: 48px;
+  }
+
+  .upload-icon {
+    font-size: 24px;
+  }
+
+  .message-bubble {
+    max-width: 95%;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .question-card {
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 6px;
+  }
+
+  .question-text {
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .option-label {
+    padding: 10px 12px;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .question-input {
+    padding: 10px 12px;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .grade-btn {
+    padding: 10px 16px;
+    font-size: 12px;
+    width: 100%;
+  }
+
+  .chat-suggestions {
+    padding: 0 16px 12px;
+    gap: 6px;
+  }
+
+  .suggestion-chip {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .help-wrapper {
+    padding: 0 12px;
+  }
+
+  .help-title {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  .help-step-card {
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .sidebar-mobile-menu {
+    top: 70px;
+    padding: 8px;
+  }
+
+  .sidebar-action-btn {
+    padding: 10px 12px;
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .workspace-chat-section {
+    height: auto;
+    min-height: 300px;
+  }
+
+  .chat-input-form {
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .chat-send-btn {
+    padding: 10px 12px;
+    min-width: 50px;
+    font-size: 12px;
+  }
+
+  .notification-toast {
+    min-width: 280px;
+    max-width: calc(100vw - 20px);
+    font-size: 12px;
+    padding: 12px 16px;
+  }
+}
+
+/* SMALL DEVICES (481px - 768px) */
+@media (max-width: 768px) and (min-width: 481px) {
+  .upload-wrapper {
+    padding: 0 16px;
+  }
+
+  .message-bubble {
+    max-width: 85%;
+  }
+
+  .question-card {
+    padding: 20px;
+  }
+
+  .workspace-chat-section {
+    min-height: 350px;
+  }
 }
